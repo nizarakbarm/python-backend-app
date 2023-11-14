@@ -2,6 +2,7 @@
     "conventionalCommits.scopes": [
         "CI Codacy",
         "CI",
-        "Docker"
+        "Docker",
+        "hadolint"
     ]
 }

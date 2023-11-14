@@ -13,6 +13,10 @@ permissions:
 
 jobs:
     hadolint:
+     permissions:
+        contents: write
+        issues: write
+        actions: read
      runs-on: ubuntu-latest
      steps:
       - name: Checkout
