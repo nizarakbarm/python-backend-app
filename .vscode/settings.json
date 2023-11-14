@@ -1,6 +1,7 @@
 {
     "conventionalCommits.scopes": [
         "CI Codacy",
-        "CI"
+        "CI",
+        "Docker"
     ]
 }
