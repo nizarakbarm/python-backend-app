@@ -19,6 +19,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Run Docker linting using Hadolint
+        id: hadolint
         uses: hadolint/hadolint-action@v3.1.0
         with: 
          failure-threshold: warning
