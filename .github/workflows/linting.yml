@@ -11,6 +11,8 @@ on:
         - main
         - develop
         - 'feature/**'
+        paths:
+        - '**.py'
 
 concurrency:
     group: ${{ github.workflow}}-${{ github.ref }}

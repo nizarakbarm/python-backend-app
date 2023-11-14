@@ -11,6 +11,8 @@ on:
         - main
         - develop
         - 'feature/**'
+        paths:
+        - '**.py'
 
 permissions:
     contents: read
