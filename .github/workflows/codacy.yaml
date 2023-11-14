@@ -1,14 +1,16 @@
 name: codacy
 
 on:
-    workflow_run:
-        workflows:
-            - Linters
-        types:
-            - completed
+    pull_request:
+        types: [opened, reopened]
         branches:
-            - develop
-            - 'feature/**'
+        - develop
+        - 'feature/**'
+    push:
+        branches:
+        - main
+        - develop
+        - 'feature/**'
 
 permissions:
     contents: read
