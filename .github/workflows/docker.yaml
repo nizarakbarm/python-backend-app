@@ -18,7 +18,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Run Docker linting using Hadolint
-        uses: hadolint/hadolint-action@77e79bb879e179a6f5f5a680d99d03589d77cd92
+        uses: hadolint/hadolint-action@v3.1.0
         with: 
          failure-threshold: warning
       - name: Update Pull Request
