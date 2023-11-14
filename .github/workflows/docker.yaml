@@ -19,8 +19,6 @@ jobs:
         uses: actions/checkout@v4
       - name: Run Docker linting using Hadolint
         uses: hadolint/hadolint-action@77e79bb879e179a6f5f5a680d99d03589d77cd92
-        with: 
-         dockerfile: Dockerfile
         
     build:
         runs-on: ubuntu-latest
