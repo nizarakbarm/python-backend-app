@@ -9,14 +9,11 @@ on:
 
 
 permissions:
-    contents: read
+    contents: write # for actions/checkout to fetch code
+    issues: write
 
 jobs:
     hadolint:
-     permissions:
-        contents: write
-        issues: write
-        actions: read
      runs-on: ubuntu-latest
      steps:
       - name: Checkout
