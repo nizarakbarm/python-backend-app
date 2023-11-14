@@ -5,6 +5,9 @@ on:
         workflows: [Codacy Security Scan]
         types:
             - completed
+        branches:
+            - develop
+            - 'feature/**'
 
 permissions:
     contents: read

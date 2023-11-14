@@ -5,6 +5,9 @@ on:
         workflows: [Unit test]
         types:
             - completed
+        branches:
+            - develop
+            - 'feature/**'
 
 permissions:
     contents: read

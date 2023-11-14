@@ -5,6 +5,9 @@ on:
         workflows: [Linters]
         types:
             - completed
+        branches:
+            - develop
+            - 'feature/**'
 
 permissions:
     contents: read
