@@ -1,0 +1,32 @@
+name: UnitTest
+
+on:
+    pull_request:
+        types: [opened, reopened]
+        branches:
+        - develop
+        - 'feature/**'
+    push:
+        branches:
+        - main
+        - develop
+        - 'feature/**'
+        paths:
+        - '**.py'
+
+permissions:
+    contents: read
+
+jobs:
+    UnitTest:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Setup Python
+              uses: actions/setup-python@v4
+              with:
+                python-version: '3.11'
+            - run: pip install -r requirements.txt
+            - name: Run python unit test
+              run: python test_app.py

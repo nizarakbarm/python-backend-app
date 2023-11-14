@@ -1,0 +1,51 @@
+name: codacy
+
+on:
+    pull_request:
+        types: [opened, reopened]
+        branches:
+        - develop
+        - 'feature/**'
+    push:
+        branches:
+        - main
+        - develop
+        - 'feature/**'
+        paths:
+        - '**.py'
+
+permissions:
+    contents: read
+
+jobs:
+    codacy-security-scan:
+        permissions:
+            contents: read # for actions/checkout to fetch code
+            security-events: write # for github/codeql-action/upload-sarif to upload to SARIF results
+            actions: read
+        name: Codacy Security Scan
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Run Codacy Analysis CLI
+              uses: codacy/codacy-analysis-cli-action@v4.3.0
+              with:
+                project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+                skip-uncommitted-files-check: "true"
+                verbose: true
+                output: results.sarif
+                format: sarif
+                upload: true
+                fail-if-incomplete: true
+                #Adjust severity of non-security issues
+                gh-code-scanning-compat: true
+                # Force 0 exit code to allow SARIF file generation
+                # This will handover control about PR rejection to GitHub side
+                max-allowed-issues: 2147483647
+            
+            - name: Upload SARIF results file
+              uses: github/codeql-action/upload-sarif@v2
+              with:
+                sarif_file: results.sarif
