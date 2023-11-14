@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: MIT-0
 
 from flask import Flask, render_template, request
-from random import randint
 
 
 def shutdown_server():
