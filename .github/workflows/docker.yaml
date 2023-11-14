@@ -2,7 +2,7 @@ name: cd to docker
 
 on:
     workflow_run:
-        workflows: [Codacy Security Scan]
+        workflows: [Unit test]
         types:
             - completed
 

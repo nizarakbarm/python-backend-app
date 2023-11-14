@@ -1,0 +1,27 @@
+name: Unit test
+
+on:
+    workflow_run:
+        workflows: [Codacy Security Scan]
+        types:
+            - completed
+
+permissions:
+    contents: read
+
+jobs:
+    UnitTest:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Setup Python
+              uses: actions/setup-python@v4
+              with:
+                python-version: '3.11'
+            - run: pip install -r requirements.txt
+            - name: Run Flask using nohup
+              run: |
+                nohup python web.py &
+            - name: Run python unit test
+              run: python test_app.py

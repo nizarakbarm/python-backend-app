@@ -13,15 +13,15 @@ class TestMyApp(unittest.TestCase):
         self.app = myapp.test_client()
 
     def test_main(self):
-        rv = self.app.get('/')
-        assert rv.status == '200 OK'
-        assert b'Congratulations' in rv.data
-        #assert False
+        rv = self.app.get("/")
+        assert rv.status == "200 OK"
+        assert b"Congratulations" in rv.data
+        # assert False
 
     def test_404(self):
-        rv = self.app.get('/other')
-        self.assertEqual(rv.status, '404 NOT FOUND')
+        rv = self.app.get("/other")
+        self.assertEqual(rv.status, "404 NOT FOUND")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
