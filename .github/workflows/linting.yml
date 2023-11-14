@@ -52,7 +52,7 @@ jobs:
          - name: isort
            uses: liskin/gh-problem-matcher-wrap@c16e095dffef531e20a97f84d22d1363e0964c75
            with:
-            linters: isrot
+            linters: isort
             run: isort --check .
 
     black:
