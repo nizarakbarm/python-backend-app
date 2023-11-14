@@ -20,8 +20,5 @@ jobs:
               with:
                 python-version: '3.11'
             - run: pip install -r requirements.txt
-            - name: Run Flask using nohup
-              run: |
-                nohup python web.py &
             - name: Run python unit test
               run: python test_app.py

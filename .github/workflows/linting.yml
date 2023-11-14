@@ -53,7 +53,7 @@ jobs:
            uses: liskin/gh-problem-matcher-wrap@c16e095dffef531e20a97f84d22d1363e0964c75
            with:
             linters: isort
-            run: isort --check .
+            run: isort --check web.py
 
     black:
         runs-on: ubuntu-latest

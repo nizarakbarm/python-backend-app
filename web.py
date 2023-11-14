@@ -23,8 +23,7 @@ def shutdown():
 @myapp.route("/")
 def hello():
     #    return name
-    return render_template(
-        "test.html", **locals())
+    return render_template("test.html", **locals())
 
 
 if __name__ == "__main__":
