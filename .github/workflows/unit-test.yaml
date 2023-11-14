@@ -1,8 +1,9 @@
-name: Unit test
+name: UnitTest
 
 on:
     workflow_run:
-        workflows: [Codacy Security Scan]
+        workflows:
+            - codacy
         types:
             - completed
         branches:

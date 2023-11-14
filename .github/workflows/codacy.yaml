@@ -1,8 +1,9 @@
-name: Codacy Security Scan
+name: codacy
 
 on:
     workflow_run:
-        workflows: [Linters]
+        workflows:
+            - Linters
         types:
             - completed
         branches:
