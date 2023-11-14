@@ -8,10 +8,6 @@ on:
         - 'feature/**'
 
 
-permissions:
-    contents: write # for actions/checkout to fetch code
-    issues: write
-
 jobs:
     hadolint:
      runs-on: ubuntu-latest
