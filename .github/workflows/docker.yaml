@@ -7,9 +7,13 @@ on:
         - develop
         - 'feature/**'
 
-
+        
 jobs:
     hadolint:
+     permissions:
+        contents: write
+        issues: write
+        pull-requests: write
      runs-on: ubuntu-latest
      steps:
       - name: Checkout
