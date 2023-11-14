@@ -23,7 +23,6 @@ jobs:
             actions: read
         name: Codacy Security Scan
         runs-on: ubuntu-latest
-        if: ${{ github.event.workflow_run.conclusion == 'success' }}
         steps:
             - name: Checkout
               uses: actions/checkout@v4
