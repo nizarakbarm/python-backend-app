@@ -171,10 +171,13 @@ jobs:
             file: ./Dockerfile
             push: false
             tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ github.ref_name }}
+        - name: get version tag
+          id: tag
+          run: echo "version_tag=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT"
         - name: Run dockle
           uses: goodwithtech/dockle-action@v0.1.2
           with:
-            image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ github.ref_name }}
+            image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ steps.tag.outputs.version_tag }}
             format: 'list'
             exit-code: '1'
             exit-level: 'warn'
@@ -193,10 +196,13 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+      - name: get version tag
+        id: tag
+        run: echo "version_tag=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT"
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ steps.tag.outputs.version_tag }}
