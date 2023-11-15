@@ -7,6 +7,8 @@ on:
         - develop
         - 'feature/**'
 
+permissions:
+  contents: read
         
 jobs:
     hadolint:
@@ -41,9 +43,31 @@ jobs:
                 repo: context.repo.repo,
                 body: output
                 })
-        
+    dockle:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+        - name: Set up Docker Buildx
+          uses: docker/setup-buildx-action@v3
+        - name: Build docker image
+          uses: docker/build-push-action@v5
+          with:
+            context: .
+            file: ./Dockerfile
+            push: false
+            tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ github.ref_name }}
+        - name: Run dockle
+          uses: goodwithtech/dockle-action@v0.1.2
+          with:
+            image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ github.ref_name }}
+            format: 'list'
+            exit-code: '1'
+            exit-level: 'warn'
+
     build:
         runs-on: ubuntu-latest
+        needs: [hadolint, dockle]
         steps:
          - name: Checkout
            uses: actions/checkout@v4
