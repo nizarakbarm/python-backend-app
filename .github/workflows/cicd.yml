@@ -159,6 +159,11 @@ jobs:
       needs: [hadolint]
       if: github.event_name	== 'pull_request'
       runs-on: ubuntu-latest
+      services:
+        registry:
+          image: registry:2.8.3
+          ports:
+            - 6595:5000
       steps:
         - name: Checkout
           uses: actions/checkout@v4
@@ -169,12 +174,12 @@ jobs:
           with:
             context: .
             file: ./Dockerfile
-            push: false
-            tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:v0.1-dev
+            push: true
+            tags: localhost:6595/${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:v0.1-dev
         - name: Run dockle
           uses: goodwithtech/dockle-action@v0.1.2
           with:
-            image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:v0.1-dev
+            image: localhost:6595/${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:v0.1-dev
             format: 'list'
             exit-code: '1'
             exit-level: 'warn'
