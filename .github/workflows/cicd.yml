@@ -164,17 +164,15 @@ jobs:
           uses: actions/checkout@v4
         - name: Set up Docker Buildx
           uses: docker/setup-buildx-action@v3
-        - name: Build docker image
-          uses: docker/build-push-action@v5
-          with:
-            context: .
-            file: ./Dockerfile
-            push: true
-            tags: localhost:5000/${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:v0.1-dev
+        - name: Build image from Dockerfile
+          env:
+            TAG: ${{ github.event.repository.name }}:v0.1-dev
+          run: |
+            docker build -t $TAG .
         - name: Run dockle
           uses: goodwithtech/dockle-action@v0.1.2
           with:
-            image: localhost:5000/${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:v0.1-dev
+            image: ${{ github.event.repository.name }}:v0.1-dev
             format: 'list'
             exit-code: '1'
             exit-level: 'warn'
