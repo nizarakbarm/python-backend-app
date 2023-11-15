@@ -166,7 +166,8 @@ jobs:
           uses: docker/setup-buildx-action@v3
         - name: get version tag
           id: tag
-          run: echo "version_tag=$(git describe --tags $(git rev-list --tags --max-count=1))" >> "$GITHUB_OUTPUT"
+          run: |
+            echo "version_tag=$(git describe --tags $(git rev-list --tags --max-count=1))" >> "$GITHUB_OUTPUT"
         - name: Build docker image
           uses: docker/build-push-action@v5
           with:
@@ -198,7 +199,8 @@ jobs:
         uses: docker/setup-buildx-action@v3
       - name: get version tag
         id: tag
-        run: echo "version_tag=$(git describe --tags $(git rev-list --tags --max-count=1))" >> "$GITHUB_OUTPUT"
+        run: |
+          echo "version_tag=$(git describe --tags $(git rev-list --tags --max-count=1))" >> "$GITHUB_OUTPUT"
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
