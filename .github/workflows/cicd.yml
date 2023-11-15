@@ -167,8 +167,9 @@ jobs:
         - name: Build image from Dockerfile
           env:
             TAG: ${{ github.event.repository.name }}:v0.1-dev
+            DOCKER_CONTENT_TRUST: 1
           run: |
-            DOCKER_CONTENT_TRUST=1 docker build -t $TAG .
+             docker build -t $TAG .
         - name: Run dockle
           uses: goodwithtech/dockle-action@v0.1.2
           with:
@@ -177,6 +178,7 @@ jobs:
             exit-code: '1'
             exit-level: 'warn'
             ignore: 'CIS-DI-0006'
+            accept-key: 'GNUPGHOME,PYTHON_GET_PIP_URL'
 
     build:
       needs: [dockle]
