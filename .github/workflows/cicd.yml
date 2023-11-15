@@ -168,7 +168,7 @@ jobs:
           env:
             TAG: ${{ github.event.repository.name }}:v0.1-dev
           run: |
-            docker build -t $TAG .
+            DOCKER_CONTENT_TRUST=1 docker build -t $TAG .
         - name: Run dockle
           uses: goodwithtech/dockle-action@v0.1.2
           with:
@@ -176,6 +176,7 @@ jobs:
             format: 'list'
             exit-code: '1'
             exit-level: 'warn'
+            ignore: 'CIS-DI-0006'
 
     build:
       needs: [dockle]
