@@ -3,8 +3,8 @@ FROM alpine:3.18.4
 WORKDIR /app
 
 RUN apk add --no-cache \
-    uwsgi-python3 \
-    python3
+    uwsgi-python3=2.0.21-r3	 \
+    python3=3.11.6-r0
 
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
