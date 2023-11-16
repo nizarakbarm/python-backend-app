@@ -175,7 +175,7 @@ jobs:
             TAG: ${{ github.event.repository.name }}:v0.1-dev
             DOCKER_CONTENT_TRUST: 1
           run: |
-             docker run $TAG sh -c 'curl -IL localhost:8080'
+             docker run $TAG sh 'curl -IL localhost:8080'
         - name: Run dockle
           uses: goodwithtech/dockle-action@v0.1.2
           env:
