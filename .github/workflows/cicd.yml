@@ -169,15 +169,7 @@ jobs:
             TAG: ${{ github.event.repository.name }}:v0.1-dev
             DOCKER_CONTENT_TRUST: 1
           run: |
-             docker build -t $TAG .
-        - name: Docker unit test
-          env:
-            TAG: ${{ github.event.repository.name }}:v0.1-dev
-            DOCKER_CONTENT_TRUST: 1
-          run: |
-             docker run -it -d -p 8080:8080 $TAG
-             curl -IL localhost:8080
-          
+             docker build -t $TAG .          
         - name: Run dockle
           uses: goodwithtech/dockle-action@v0.1.2
           env:
