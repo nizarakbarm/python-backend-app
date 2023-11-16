@@ -3,6 +3,7 @@
         "CI Codacy",
         "CI",
         "Docker",
-        "hadolint"
+        "hadolint",
+        "flask"
     ]
 }

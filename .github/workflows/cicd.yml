@@ -169,7 +169,7 @@ jobs:
             TAG: ${{ github.event.repository.name }}:v0.1-dev
             DOCKER_CONTENT_TRUST: 1
           run: |
-             docker build -t $TAG .
+             docker build -t $TAG .          
         - name: Run dockle
           uses: goodwithtech/dockle-action@v0.1.2
           env:
