@@ -1,9 +1,20 @@
-FROM python:3.11.6-alpine3.18
+FROM alpine:3.18.4
+
 WORKDIR /app
+
+RUN apk add --no-cache \
+    uwsgi-python3 \
+    python3
+
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
+
 COPY . .
+
 EXPOSE 8080
-ENV FLASK_APP=myapp
+
 USER nobody
-CMD ["flask", "run", "--host", "0.0.0.0"]
+CMD ["uwsgi", "--http", "0.0.0.0:8080", \
+     "--plugins", "python3", \
+     "--wsgi", "wsgi:app"
+]
