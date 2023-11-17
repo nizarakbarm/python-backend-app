@@ -3,6 +3,7 @@ FROM alpine:3.18.4
 WORKDIR /app
 
 RUN apk add --no-cache \
+    curl=8.4.0-r0 \
     python3=3.11.6-r0
 
 COPY requirements.txt ./
