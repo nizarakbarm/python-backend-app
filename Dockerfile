@@ -4,11 +4,11 @@ WORKDIR /app
 
 RUN apk add --no-cache \
     uwsgi-python3=2.0.21-r3	 \
-    python3=3.11.6-r0
+    python3=3.11.6-r0 \
+    py3-pip=23.3.1-r0
 
 COPY requirements.txt ./
-RUN python -m pip install --no-cache-dir --upgrade pip=23.3.1 && \
-    python -m pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
