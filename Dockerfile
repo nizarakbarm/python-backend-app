@@ -6,10 +6,9 @@ RUN apk add --no-cache \
     uwsgi-python3=2.0.21-r3	 \
     python3=3.11.6-r0
 
-RUN python -m ensurepip --upgrade
-
 COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+RUN python -m ensurepip --upgrade && \
+    pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
