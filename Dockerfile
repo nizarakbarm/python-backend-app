@@ -3,7 +3,7 @@ FROM alpine:3.18.4
 WORKDIR /app
 
 RUN apk add --no-cache \
-    linux-headers=6.3-r0 \
+    musl-dev=1.2.4-r2 \
     build-base=0.5-r3 \
     gcc=12.2.1_git20220924-r10 \
     curl=8.4.0-r0 \
