@@ -6,9 +6,11 @@ RUN apk add --no-cache \
     python3=3.11.6-r0
 
 COPY requirements.txt ./
-RUN wget -qO- https://bootstrap.pypa.io/get-pip.py | python - && \
+RUN curl -s -o get-pip.py https://bootstrap.pypa.io/get-pip.py && \
+    python get-pip.py && \
     python -m pip install --no-cache-dir uwsgi==2.0.23 && \
-    python -m pip install --no-cache-dir -r requirements.txt
+    python -m pip install --no-cache-dir -r requirements.txt && \
+    rm -f get-pip.py
 
 COPY . .
 
