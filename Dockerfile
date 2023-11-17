@@ -8,7 +8,7 @@ RUN apk add --no-cache \
 
 COPY requirements.txt ./
 RUN python -m ensurepip --upgrade && \
-    pip install --no-cache-dir -r requirements.txt
+    python -m pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
