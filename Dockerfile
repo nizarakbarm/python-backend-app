@@ -3,9 +3,11 @@ FROM alpine:3.18.4
 WORKDIR /app
 
 RUN apk add --no-cache \
+    build-base=0.5-r3 \
     gcc=12.2.1_git20220924-r10 \
     curl=8.4.0-r0 \
-    python3=3.11.6-r0
+    python3=3.11.6-r0 \
+    python3-dev=3.11.6-r0
 
 COPY requirements.txt ./
 RUN curl -s -o get-pip.py https://bootstrap.pypa.io/get-pip.py && \
