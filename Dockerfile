@@ -15,6 +15,6 @@ COPY . .
 EXPOSE 8080
 
 USER nobody
-CMD ["uwsgi", "--http", "0.0.0.0:8080", \
+CMD ["uwsgi", "--http-socket", "0.0.0.0:8080", \
      "--plugins", "python3", \
      "--wsgi", "wsgi:app" ]
