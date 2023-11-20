@@ -19,6 +19,8 @@ RUN curl -s -o get-pip.py https://bootstrap.pypa.io/get-pip.py && \
 
 COPY . .
 
+RUN chmod 755 entrypoint.sh
+
 EXPOSE 8080
 
 USER nobody
