@@ -24,4 +24,4 @@ RUN chmod 755 entrypoint.sh
 EXPOSE 8080
 
 USER nobody
-ENTRYPOINT [ "/app/entrypoint.sh" ]
+ENTRYPOINT [ "./entrypoint.sh" ]
