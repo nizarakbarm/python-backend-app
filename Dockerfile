@@ -19,9 +19,9 @@ RUN curl -s -o get-pip.py https://bootstrap.pypa.io/get-pip.py && \
 
 COPY . .
 
-RUN chmod 755 entrypoint.sh
-
 EXPOSE 8080
 
 USER nobody
-ENTRYPOINT [ "entrypoint.sh" ]
+CMD ["uwsgi", "--http", "0.0.0.0:8080", \
+     "--plugins", "python3", \
+     "--wsgi", "wsgi:myapp" ]
