@@ -1,21 +1,17 @@
-FROM alpine:3.18.4
+FROM python:3.11.6-alpine3.18
 
 WORKDIR /app
 
 RUN apk add --no-cache \
-    linux-headers=6.3-r0 \
-    build-base=0.5-r3 \
+    make=4.4.1-r1 \
     gcc=12.2.1_git20220924-r10 \
-    curl=8.4.0-r0 \
-    python3=3.11.6-r0 \
-    python3-dev=3.11.6-r0
+    linux-headers=6.3-r0 \
+    musl-dev=1.2.4-r2
 
 COPY requirements.txt ./
-RUN curl -s -o get-pip.py https://bootstrap.pypa.io/get-pip.py && \
-    python get-pip.py && \
-    python -m pip install --no-cache-dir uwsgi==2.0.23 && \
-    python -m pip install --no-cache-dir -r requirements.txt && \
-    rm -f get-pip.py
+
+RUN python -m pip install --no-cache-dir uwsgi==2.0.23 && \
+    python -m pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
