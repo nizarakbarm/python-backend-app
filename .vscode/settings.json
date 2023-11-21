@@ -1,0 +1,9 @@
+{
+    "conventionalCommits.scopes": [
+        "CI Codacy",
+        "CI",
+        "Docker",
+        "hadolint",
+        "flask"
+    ]
+}

@@ -1,0 +1,8 @@
+.git
+.git.bak
+.gitignore
+.vscode
+*.yml
+README.md
+Dockerfile
+test_app.py

@@ -1,0 +1,174 @@
+name: Python CI/CD
+
+on:
+    pull_request:
+        types: [opened, reopened]
+        branches:
+        - main
+        - develop
+        - 'feature/**'
+    push:
+        branches:
+        - main
+        - develop
+        - 'feature/**'
+        paths:
+        - '**.py'
+
+concurrency:
+    group: ${{ github.workflow}}-${{ github.ref }}
+    cancel-in-progress: true
+
+permissions:
+    contents: read
+
+jobs:
+    flake8:
+       name: flake8
+       runs-on: ubuntu-latest
+       steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+        - name: Setup Python
+          uses: actions/setup-python@v4
+          with:
+            python-version: '3.11'
+        - run: pip install -r requirements.txt
+        - run: pip install flake8
+        - name: flake8
+          uses: liskin/gh-problem-matcher-wrap@c16e095dffef531e20a97f84d22d1363e0964c75
+          with:
+            linters: flake8
+            run: flake8 .
+
+    isort:
+        runs-on: ubuntu-latest
+        steps:
+         - name: Checkout
+           uses: actions/checkout@v4
+         - name: Setup Python
+           uses: actions/setup-python@v4
+           with:
+            python-version: '3.11'
+         - run: pip install -r requirements.txt
+         - run: pip install isort
+         - name: isort
+           uses: liskin/gh-problem-matcher-wrap@c16e095dffef531e20a97f84d22d1363e0964c75
+           with:
+            linters: isort
+            run: isort --check web.py
+
+    black:
+        runs-on: ubuntu-latest
+        steps:
+         - name: Checkout
+           uses: actions/checkout@v4
+         - name: Setup Python
+           uses: actions/setup-python@v4
+           with:
+            python-version: '3.11'
+         - run: pip install -r requirements.txt
+         - name: black
+           uses: psf/black@stable
+           with:
+            options: "--check --exclude test_app.py"
+            src: "./web.py"
+
+
+    UnitTest:
+      needs: [flake8,isort,black]
+      runs-on: ubuntu-latest
+      steps:
+          - name: Checkout
+            uses: actions/checkout@v4
+          - name: Setup Python
+            uses: actions/setup-python@v4
+            with:
+              python-version: '3.11'
+          - run: pip install -r requirements.txt
+          - name: Run python unit test
+            run: python test_app.py
+
+    hadolint:
+      needs: [UnitTest]
+      if: github.event_name	== 'pull_request'
+      permissions:
+          contents: write
+          issues: write
+          pull-requests: write
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+        - name: Run Docker linting using Hadolint
+          id: hadolint
+          uses: hadolint/hadolint-action@v3.1.0
+          with: 
+            failure-threshold: warning
+        - name: Update Pull Request
+          uses: actions/github-script@v6
+          if: github.event_name == 'pull_request'
+          with:
+              script: |
+                  const output = `
+                  #### Hadolint: \`${{ steps.hadolint.outcome }}\`
+                  \`\`\`
+                  ${process.env.HADOLINT_RESULTS}
+                  \`\`\`
+                  `;
+          
+                  github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: output
+                  })
+
+    dockle:
+      needs: [hadolint]
+      if: github.event_name	== 'pull_request'
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+        - name: Set up Docker Buildx
+          uses: docker/setup-buildx-action@v3
+        - name: Build image from Dockerfile
+          env:
+            TAG: ${{ github.event.repository.name }}:v0.1
+            DOCKER_CONTENT_TRUST: 1
+          run: |
+             docker build -t $TAG .          
+        - name: Run dockle
+          uses: goodwithtech/dockle-action@v0.1.2
+          env:
+            DOCKER_CONTENT_TRUS: 1
+          with:
+            image: ${{ github.event.repository.name }}:v0.1
+            format: 'list'
+            exit-code: '1'
+            exit-level: 'warn'
+            ignore: 'CIS-DI-0006,CIS-DI-0010'
+            accept-key: 'GNUPGHOME,PYTHON_GET_PIP_URL,LANG,PYTHONDONTWRITEBYTECODE,PATH,PYTHON_PIP_VERSION,FLASK_APP,PYTHON_SETUPTOOLS_VERSION,PYTHON_GET_PIP_SHA256,LANG,PYTHON_VERSION,--strip-components,gnuArch'
+
+    build:
+      needs: [dockle]
+      if: github.event_name	== 'pull_request'
+      runs-on: ubuntu-latest
+      steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:v0.1
